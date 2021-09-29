@@ -147,6 +147,48 @@ namespace ATMDOTNET
                         }
                         break;
                     case 4:
+                        {
+                            decimal balance = 0;
+                            try
+                            {
+                                Authenticate(ref username, ref password);
+                                Console.WriteLine("Enter Amount");
+                                amount = Convert.ToDecimal(Console.ReadLine());
+                                Console.WriteLine("Enter Recepient username");
+                                string recepient = Console.ReadLine();
+                                balance =
+                                    ATM.Transfer(username, recepient, amount);
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                Console
+                                    .WriteLine("No user found with that username ");
+                            }
+                            catch (ArgumentException)
+                            {
+                                Console
+                                    .WriteLine("Entered Wrong Password. The police are waiting outside for you.");
+                            }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine("Enter valid number only");
+                            }
+                            catch (OverflowException)
+                            {
+                                Console
+                                    .WriteLine("In your dreams. You dont have that much. The police are waiting outside for you.");
+                                Console
+                                    .WriteLine("Your account has been closed. your outstanding due is = " +
+                                    ATM.CheckBalance(username));
+                                ATM.RemoveAccount (username);
+                            }
+                            finally
+                            {
+                                Console
+                                    .WriteLine("Transaction closed. Your balance = " +
+                                    balance);
+                            }
+                        }
                         break;
                     case 5:
                         break;

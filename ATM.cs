@@ -86,7 +86,7 @@ namespace ATMDOTNET
             return balance;
         }
 
-        public static decimal CheckBalance(string name, decimal amount)
+        public static decimal CheckBalance(string name)
         {
             try
             {
@@ -103,13 +103,17 @@ namespace ATMDOTNET
         {
             try
             {
+                if (amount < 0)
+                {
+                    throw new FormatException();
+                }
                 if (accounts[from] - amount < 0)
                 {
-                    throw new ArgumentException("Insufficient funds");
+                    throw new OverflowException("Insufficient funds");
                 }
                 if (!accounts.ContainsKey(to))
                 {
-                    throw new ArgumentException("Recepient Name not found");
+                    throw new KeyNotFoundException("Recepient Name not found");
                 }
             }
             finally
