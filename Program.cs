@@ -231,6 +231,45 @@ namespace ATMDOTNET
                         }
                         break;
                     case 6:
+                        {
+                            decimal balance = 0;
+                            try
+                            {
+                                Authenticate(ref username, ref password);
+                                Console
+                                    .WriteLine("AD: Yaxis bank unbelieveable[amazing], YesBI un-believeable[fraudulent]");
+                                balance = ATM.Deposit(username, 0.01m);
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                Console
+                                    .WriteLine("No user found with name " +
+                                    username +
+                                    "No money for you");
+                            }
+                            catch (ArgumentException)
+                            {
+                                Console
+                                    .WriteLine("Entered Wrong Password. No money for you.");
+                            }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine("Enter valid number only");
+                            }
+                            catch (OverflowException)
+                            {
+                                Console
+                                    .WriteLine("In your dreams. You dont have that much. The police are waiting outside for you.");
+                            }
+                            finally
+                            {
+                                Console
+                                    .WriteLine("Thank you for watching ad worth 0.01 money");
+                                Console
+                                    .WriteLine("Transaction closed. Your balance = " +
+                                    balance);
+                            }
+                        }
                         break;
                     default:
                         {
