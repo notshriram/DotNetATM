@@ -5,14 +5,20 @@ namespace ATMDOTNET
 {
     public static class ATM
     {
+        private static int transactionNumber;
+
         private static Dictionary<string, decimal> accounts;
 
         private static Dictionary<string, string> auth;
 
+        private static Dictionary<string, List<string>> history;
+
         static ATM()
         {
+            transactionNumber = 0;
             accounts = new Dictionary<string, decimal> { };
             auth = new Dictionary<string, string> { };
+            history = new Dictionary<string, List<string>> { };
         }
 
         public static bool Auth(string username, string password)
@@ -26,10 +32,16 @@ namespace ATMDOTNET
             {
                 accounts.Add(name, 0);
                 auth.Add (name, password);
+                history.Add(name, new List<string>());
             }
             finally
             {
+                transactionNumber++;
                 accounts[name] = 0;
+                history[name]
+                    .Add("Transaction Number " +
+                    transactionNumber +
+                    " : Created account");
             }
             return name;
         }
@@ -49,7 +61,13 @@ namespace ATMDOTNET
             }
             finally
             {
+                transactionNumber++;
                 accounts[name] -= amount;
+                history[name]
+                    .Add("Transaction Number " +
+                    transactionNumber +
+                    " : Withdrew " +
+                    amount);
             }
             return accounts[name];
         }
@@ -65,7 +83,13 @@ namespace ATMDOTNET
             }
             finally
             {
+                transactionNumber++;
                 accounts[name] += amount;
+                history[name]
+                    .Add("Transaction Number " +
+                    transactionNumber +
+                    " : Deposited " +
+                    amount);
             }
 
             return accounts[name];
@@ -80,10 +104,17 @@ namespace ATMDOTNET
             }
             finally
             {
+                transactionNumber++;
                 accounts.Remove (name);
                 auth.Remove (name);
+                history.Remove (name);
             }
             return balance;
+        }
+
+        public static List<string> GetHistory(string name)
+        {
+            return history[name];
         }
 
         public static decimal CheckBalance(string name)
@@ -118,8 +149,23 @@ namespace ATMDOTNET
             }
             finally
             {
+                transactionNumber++;
                 accounts[to] += amount;
                 accounts[from] -= amount;
+                history[from]
+                    .Add("Transaction Number " +
+                    transactionNumber +
+                    " : Sent " +
+                    amount +
+                    " to " +
+                    to);
+                history[to]
+                    .Add("Transaction Number " +
+                    transactionNumber +
+                    " : received " +
+                    amount +
+                    " from " +
+                    from);
             }
             return accounts[from];
         }

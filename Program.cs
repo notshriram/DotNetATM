@@ -191,6 +191,44 @@ namespace ATMDOTNET
                         }
                         break;
                     case 5:
+                        {
+                            decimal balance = 0;
+                            try
+                            {
+                                Authenticate(ref username, ref password);
+                                balance = ATM.CheckBalance(username);
+                                foreach (string s in ATM.GetHistory(username))
+                                {
+                                    Console.WriteLine (s);
+                                }
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                Console
+                                    .WriteLine("No user found with name " +
+                                    username);
+                            }
+                            catch (ArgumentException)
+                            {
+                                Console
+                                    .WriteLine("Entered Wrong Password. The police are waiting outside for you.");
+                            }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine("Enter valid number only");
+                            }
+                            catch (OverflowException)
+                            {
+                                Console
+                                    .WriteLine("In your dreams. You dont have that much. The police are waiting outside for you.");
+                            }
+                            finally
+                            {
+                                Console
+                                    .WriteLine("Transaction closed. Your balance = " +
+                                    balance);
+                            }
+                        }
                         break;
                     case 6:
                         break;
