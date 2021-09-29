@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ATMDOTNET
 {
@@ -42,12 +43,13 @@ namespace ATMDOTNET
 
             Enter your response number [1-6]");
                 int choice = Convert.ToInt32(Console.ReadLine());
+                string username = null;
+                string password = null;
+                decimal amount = 0;
                 switch (choice)
                 {
                     case 1:
                         {
-                            string username;
-                            string password;
                             string createdAccount = "";
                             try
                             {
@@ -69,6 +71,42 @@ namespace ATMDOTNET
                             break;
                         }
                     case 2:
+                        {
+                            decimal balance = 0;
+                            try
+                            {
+                                Authenticate(ref username, ref password);
+                                Console.WriteLine("Enter Amount");
+                                amount = Convert.ToDecimal(Console.ReadLine());
+                                balance = ATM.Withdraw(username, amount);
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                Console
+                                    .WriteLine("No user found with name " +
+                                    username);
+                            }
+                            catch (ArgumentException)
+                            {
+                                Console
+                                    .WriteLine("Entered Wrong Password. The police are waiting outside for you.");
+                            }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine("Enter valid number only");
+                            }
+                            catch (OverflowException)
+                            {
+                                Console
+                                    .WriteLine("In your dreams. You dont have that much. The police are waiting outside for you.");
+                            }
+                            finally
+                            {
+                                Console
+                                    .WriteLine("Transaction closed. Your balance = " +
+                                    balance);
+                            }
+                        }
                         break;
                     case 3:
                         break;

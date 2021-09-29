@@ -40,7 +40,7 @@ namespace ATMDOTNET
             {
                 if (accounts[name] - amount < 0)
                 {
-                    throw new ArgumentException("No sufficient balance");
+                    throw new OverflowException("No sufficient balance");
                 }
             }
             finally
