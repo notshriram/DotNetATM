@@ -109,6 +109,42 @@ namespace ATMDOTNET
                         }
                         break;
                     case 3:
+                        {
+                            decimal balance = 0;
+                            try
+                            {
+                                Authenticate(ref username, ref password);
+                                Console.WriteLine("Enter Amount");
+                                amount = Convert.ToDecimal(Console.ReadLine());
+                                balance = ATM.Deposit(username, amount);
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                Console
+                                    .WriteLine("No user found with name " +
+                                    username);
+                            }
+                            catch (ArgumentException)
+                            {
+                                Console
+                                    .WriteLine("Entered Wrong Password. The police are waiting outside for you.");
+                            }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine("Enter valid number only");
+                            }
+                            catch (OverflowException)
+                            {
+                                Console
+                                    .WriteLine("In your dreams. You dont have that much. The police are waiting outside for you.");
+                            }
+                            finally
+                            {
+                                Console
+                                    .WriteLine("Transaction closed. Your balance = " +
+                                    balance);
+                            }
+                        }
                         break;
                     case 4:
                         break;

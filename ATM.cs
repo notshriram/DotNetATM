@@ -42,6 +42,10 @@ namespace ATMDOTNET
                 {
                     throw new OverflowException("No sufficient balance");
                 }
+                if (amount < 0)
+                {
+                    throw new FormatException();
+                }
             }
             finally
             {
@@ -54,10 +58,14 @@ namespace ATMDOTNET
         {
             try
             {
-                accounts[name] += amount;
+                if (amount < 0)
+                {
+                    throw new FormatException();
+                }
             }
             finally
             {
+                accounts[name] += amount;
             }
 
             return accounts[name];
