@@ -7,16 +7,25 @@ namespace ATMDOTNET
     {
         private static Dictionary<string, decimal> accounts;
 
+        private static Dictionary<string, string> auth;
+
         static ATM()
         {
             accounts = new Dictionary<string, decimal> { };
+            auth = new Dictionary<string, string> { };
         }
 
-        public static string AddAccount(string name)
+        public static bool Auth(string username, string password)
+        {
+            return auth[username] == password;
+        }
+
+        public static string AddAccount(string name, string password)
         {
             try
             {
                 accounts.Add(name, 0);
+                auth.Add (name, password);
             }
             finally
             {
@@ -64,6 +73,7 @@ namespace ATMDOTNET
             finally
             {
                 accounts.Remove (name);
+                auth.Remove (name);
             }
             return balance;
         }
